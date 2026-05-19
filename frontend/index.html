@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula Storage | Distributed Cloud Service</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <i class="fas fa-cloud-bolt"></i>
+            <span>Nebula Storage</span>
+        </div>
+        <div class="nav-links">
+            <input id="username" type="text" placeholder="username" value="admin" style="padding:6px 8px;border-radius:8px;border:1px solid #d1d5db;">
+            <input id="password" type="password" placeholder="password" value="admin123" style="padding:6px 8px;border-radius:8px;border:1px solid #d1d5db;">
+            <button class="btn btn-ghost" onclick="login()">Login</button>
+            <button class="btn btn-ghost" onclick="logout()">Logout</button>
+            <span id="api-status" class="status-indicator">
+                <span class="dot"></span>
+                <span class="status-text">Connecting...</span>
+            </span>
+        </div>
+    </nav>
+
+    <main>
+        <header>
+            <h1>Distributed File System</h1>
+            <p>Secure, replicated, and chunked cloud storage for your most important assets.</p>
+        </header>
+
+        <section class="upload-section glass">
+            <div class="upload-container" id="drop-zone">
+                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                <h3>Upload New File</h3>
+                <p>Drag and drop or click to browse</p>
+                <input type="file" id="fileInput" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Select File</button>
+            </div>
+            <div id="upload-progress-container" class="hidden">
+                <div class="progress-info">
+                    <span id="upload-filename">filename.ext</span>
+                    <span id="upload-percentage">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="files-section">
+            <div class="section-header">
+                <h2>Your Files</h2>
+                <button class="btn btn-ghost" onclick="loadFiles()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div id="fileList" class="file-grid">
+                <!-- Skeleton loader -->
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Detailed View Modal -->
+    <div id="detailsModal" class="modal hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2 id="modal-filename">File Details</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <label>Total Chunks</label>
+                        <span id="modal-chunks">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <label>File Size</label>
+                        <span id="modal-size">0 KB</span>
+                    </div>
+                </div>
+                <h3>Chunk Distribution</h3>
+                <div id="chunk-list" class="chunk-list">
+                    <!-- Chunks populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
