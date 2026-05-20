@@ -3,37 +3,6 @@
 ## Overview
 This backend is built with FastAPI and simulates distributed file storage by splitting files into chunks, replicating chunks across storage nodes, storing metadata in SQLAlchemy models, validating integrity with SHA-256, and reconstructing files with replica failover.
 
-## Live Deployment
-Frontend + Backend:
-https://distributed-cloud-storage-production.up.railway.app
-API Docs:
-https://distributed-cloud-storage-production.up.railway.app/docs
-
-## System Architecture
-Client → FastAPI API → Chunk Service → Storage Nodes
-                          ↓
-                    Metadata Database
-## Features
-
-- JWT Authentication
-- Distributed chunk storage
-- Replica failover recovery
-- SHA-256 integrity verification
-- Weighted node balancing
-- Dynamic node scaling
-- Railway cloud deployment
-- Interactive frontend dashboard
-- Chunk metadata inspection
-- Fault-tolerant download reconstruction
-
-Flow:
-1. User uploads file
-2. File split into chunks
-3. Chunks hashed with SHA-256
-4. Replicas distributed across nodes
-5. Metadata stored in database
-6. Download reconstructs file from chunks
-7. 
 ## Implemented Stack
 - FastAPI
 - SQLAlchemy
@@ -56,69 +25,28 @@ Flow:
 - `GET /file/{id}/chunks` -> per-chunk mapping and hash info (auth required)
 - `DELETE /file/{id}` -> delete file + chunk replicas (auth required)
 
-## Postman POST Examples
-
-### 1. Login
-- Method: `POST`
-- URL: `http://127.0.0.1:8000/auth/login`
-- Headers:
-  - `Content-Type: application/json`
-- Body (raw, JSON):
-```json
-{
-  "username": "admin",
-  "password": "admin123"
-}
-```
-- Expected: `200` with `access_token`
-
-### 2. Upload File
-- Method: `POST`
-- URL: `http://127.0.0.1:8000/upload`
-- Headers:
-  - `Authorization: Bearer <access_token>`
-- Body:
-  - `form-data`
-  - Key: `file` (type: File), Value: choose any local file
-- Expected: `200`
-
-### 3. Add Node
-- Method: `POST`
-- URL: `http://127.0.0.1:8000/nodes?node_name=node4`
-- Headers:
-  - `Authorization: Bearer <access_token>`
-- Body: none
-- Expected: `200` with updated node list
-
-### 4. Rebalance Storage
-- Method: `POST`
-- URL: `http://127.0.0.1:8000/nodes/rebalance`
-- Headers:
-  - `Authorization: Bearer <access_token>`
-- Body: none
-- Expected: `200` with moved replica count
-
-## Run Locally
+## Local Run (Single Port for Frontend + Backend)
 1. `cd Cloud-Sys/backend`
 2. `python -m venv venv`
-3. `venv\Scripts\activate` (Windows) or `source venv/bin/activate` (Linux/Mac)
+3. Activate venv:
+   - Windows: `venv\\Scripts\\activate`
+   - Linux/Mac: `source venv/bin/activate`
 4. `pip install -r requirements.txt`
-5. Copy `.env.example` to `.env` and adjust values
-6. `uvicorn app.main:app --reload`
+5. `copy .env.example .env` (Windows) or `cp .env.example .env`
+6. `uvicorn app.main:app --reload --port 8000`
 
-Docs: `http://127.0.0.1:8000/docs`
+Open:
+- App UI: `http://127.0.0.1:8000/`
+- Swagger: `http://127.0.0.1:8000/docs`
 
-## Frontend + Backend Connection
-1. Start backend from `Cloud-Sys/backend`:
-   - `uvicorn app.main:app --reload`
-2. Open `Cloud-Sys/frontend/index.html` in browser.
-3. Login with backend credentials (`admin` / `admin123` by default).
-4. Upload, list, inspect chunk details, download, and delete files from UI.
+## Local Docker Run
+1. `cd Cloud-Sys/backend`
+2. `docker compose up -d --build`
+3. Open `http://127.0.0.1/`
 
-## Test
+## Testing
 - `python -m pytest -q`
-- Stress test script:
-  - `python tests/stress_test.py`
+- Stress test: `python tests/stress_test.py`
 
 ## Live Smoke Verification
 Verified on May 19, 2026 using local backend on `http://127.0.0.1:8001` (used `8001` because local `8000` may be occupied by another process).
@@ -197,7 +125,7 @@ Smoke run results:
 - Setup CI/CD pipeline - Done
 - Deploy backend server - Pending
 
-## Production Improvements
+## Your TODO List
 1. Configure production `.env` values:
    - strong `JWT_SECRET_KEY`
    - strong `ENCRYPTION_KEY`
