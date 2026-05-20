@@ -41,11 +41,9 @@ if settings.force_https_redirect:
     app.add_middleware(HTTPSRedirectMiddleware)
 
 
-@app.get("/")
-async def root():
-    return {
-        "message": "Distributed Cloud File Storage API Running"
-    }
+@app.get("/api/health")
+async def health():
+    return {"message": "Distributed Cloud File Storage API Running"}
 
 
 @app.exception_handler(Exception)

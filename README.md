@@ -38,6 +38,7 @@ This backend is built with FastAPI and simulates distributed file storage by spl
 Open:
 - App UI: `http://127.0.0.1:8000/`
 - Swagger: `http://127.0.0.1:8000/docs`
+Live Preview: https://distributed-cloud-storage-production.up.railway.app
 
 ## Local Docker Run
 1. `cd Cloud-Sys/backend`
