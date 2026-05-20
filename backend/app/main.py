@@ -1,9 +1,11 @@
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from app.config.settings import settings
@@ -25,6 +27,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
+frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
 
 if settings.force_https_redirect:
     app.add_middleware(HTTPSRedirectMiddleware)
@@ -39,9 +42,12 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def root():
-    return {"message": "Distributed Cloud Storage API running"}
+@app.get("/", include_in_schema=False)
+def frontend_home():
+    index_file = frontend_dir / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+    return JSONResponse(status_code=404, content={"detail": "Frontend not found."})
 
 
 @app.exception_handler(Exception)
@@ -51,3 +57,6 @@ async def unhandled_exception_handler(_: Request, exc: Exception):
 
 
 app.include_router(router)
+
+if frontend_dir.exists():
+    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
