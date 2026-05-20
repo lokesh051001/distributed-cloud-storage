@@ -3,6 +3,37 @@
 ## Overview
 This backend is built with FastAPI and simulates distributed file storage by splitting files into chunks, replicating chunks across storage nodes, storing metadata in SQLAlchemy models, validating integrity with SHA-256, and reconstructing files with replica failover.
 
+## Live Deployment
+Frontend + Backend:
+https://distributed-cloud-storage-production.up.railway.app
+API Docs:
+https://distributed-cloud-storage-production.up.railway.app/docs
+
+## System Architecture
+Client → FastAPI API → Chunk Service → Storage Nodes
+                          ↓
+                    Metadata Database
+## Features
+
+- JWT Authentication
+- Distributed chunk storage
+- Replica failover recovery
+- SHA-256 integrity verification
+- Weighted node balancing
+- Dynamic node scaling
+- Railway cloud deployment
+- Interactive frontend dashboard
+- Chunk metadata inspection
+- Fault-tolerant download reconstruction
+
+Flow:
+1. User uploads file
+2. File split into chunks
+3. Chunks hashed with SHA-256
+4. Replicas distributed across nodes
+5. Metadata stored in database
+6. Download reconstructs file from chunks
+7. 
 ## Implemented Stack
 - FastAPI
 - SQLAlchemy
@@ -166,7 +197,7 @@ Smoke run results:
 - Setup CI/CD pipeline - Done
 - Deploy backend server - Pending
 
-## Your TODO List
+## Production Improvements
 1. Configure production `.env` values:
    - strong `JWT_SECRET_KEY`
    - strong `ENCRYPTION_KEY`
