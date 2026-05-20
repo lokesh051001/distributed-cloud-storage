@@ -34,6 +34,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/")
+async def root():
+    return {
+        "message": "Distributed Cloud File Storage API Running"
+    }
 frontend_dir = Path(__file__).resolve().parents[2] / "frontend"
 
 if settings.force_https_redirect:
